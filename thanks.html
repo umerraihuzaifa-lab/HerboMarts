@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thanks - Order placed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .thanks-wrap{max-width:800px;margin:60px auto;text-align:center;padding:20px}
+    .thanks-card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+    .thanks-card img{max-width:160px;border-radius:10px}
+    .btn-home{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="thanks-wrap">
+    <div class="thanks-card">
+      <h1>Thank you! Your order has been received.</h1>
+      <p id="orderSummary" style="color:var(--muted)"></p>
+      <div id="imageHolder"></div>
+      <a class="btn-home" href="index.html">Shop more</a>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const raw = localStorage.getItem('lastOrder');
+      if(!raw){
+        document.getElementById('orderSummary').innerText = 'I couldn't find your order record.';
+        return;
+      }
+      const order = JSON.parse(raw);
+      const prod = order.product || {};
+      document.getElementById('orderSummary').innerText = Order: ${prod.title || ''} — ${prod.price || ''} — Name: ${order.customer.name || ''}`;
+      if(prod.img){
+        const img = document.createElement('img');
+        img.src = prod.img;
+        document.getElementById('imageHolder').appendChild(img);
+      }
+      // Optionally clear lastOrder after showing
+      // localStorage.removeItem('lastOrder');
+    });
+  </script>
+</body>
+</html>

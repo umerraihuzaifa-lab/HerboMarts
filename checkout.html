@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - Pansari</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* small overrides for checkout page */
+    .checkout-wrap{max-width:900px;margin:28px auto;padding:20px}
+    .checkout-card{display:grid;grid-template-columns:1fr 1fr;gap:18px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.05)}
+    .checkout-card img{width:100%;height:320px;object-fit:cover;border-radius:10px}
+    .order-info h2{margin-top:0}
+    .form-row{margin-bottom:10px}
+    input,button,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd}
+    .place-btn{background:var(--accent);color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;font-weight:700}
+    @media (max-width:800px){
+      .checkout-card{grid-template-columns:1fr}
+      .checkout-card img{height:220px}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="logo">Super Pansar Store</div>
+      <div class="nav-icons">
+        <a href="#"><i class="fa fa-arrow-left"></i> Back</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="checkout-wrap">
+    <h1>Herbal Benefits</h1>
+    <p id="note" style="color:var(--muted)">Natural Healing – Herbs provide treatment without harmful chemicals.
+
+Boosts Immunity – Strengthens the immune system to fight diseases.
+
+Relief in Cold & Flu – Many herbs are effective for cough, flu, and respiratory issues.
+
+Skin & Hair Care – Help cleanse the skin, treat acne, and strengthen hair.
+
+Improves Digestion – Useful for indigestion, bloating, and stomach disorders.
+
+Mental Relaxation – Certain herbs reduce stress, anxiety, and improve sleep.
+
+Energy Provider – Give natural freshness and vitality to the body.</p>
+
+    <div class="checkout-card">
+      <div>
+        <img id="prodImg" src="" alt="product image">
+      </div>
+      <div class="order-info">
+        <h2 id="prodTitle">Product title</h2>
+        <p id="prodPrice" style="font-size:18px;color:var(--accent);font-weight:700"></p>
+
+        <h3>Shipping details</h3>
+        <div class="form-row"><input id="name" placeholder="Full name"></div>
+        <div class="form-row"><input id="phone" placeholder="Phone number"></div>
+        <div class="form-row"><input id="address" placeholder="Full address"></div>
+
+        <h3>Payment</h3>
+        <div class="form-row">
+          <select id="payment">
+            <option>Cash on delivery</option>
+            <option>Debit/Credit (demo)</option>
+            <option>Mobile wallet (demo)</option>
+          </select>
+        </div>
+
+        <div style="margin-top:12px">
+          <button id="placeOrder" class="place-btn">Place Order</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Load product from localStorage
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const raw = localStorage.getItem('selectedProduct');
+      if(!raw){
+        document.getElementById('note').innerText = 'کوئی پروڈکٹ منتخب نہیں ہوئی — براہ کرم پہلے پروڈکٹ پر View More کلک کریں۔';
+        // optional: redirect to index after 2s
+        setTimeout(()=> window.location.href = 'index.html', 1600);
+        return;
+      }
+      const product = JSON.parse(raw);
+      document.getElementById('prodImg').src = product.img;
+      document.getElementById('prodTitle').innerText = product.title;
+      document.getElementById('prodPrice').innerText = product.price;
+
+      // Place order button
+      document.getElementById('placeOrder').addEventListener('click', ()=>{
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const address = document.getElementById('address').value.trim();
+        if(!name || !phone || !address){
+          alert('براہِ کرم نام، فون اور ایڈریس ضرور بھر دیں۔');
+          return;
+        }
+        // Save simplified order info (in real app send to server)
+        const order = {
+          product,
+          customer:{name,phone,address},
+          payment: document.getElementById('payment').value,
+          date: new Date().toISOString()
+        };
+        // Save to localStorage (demo)
+        localStorage.setItem('lastOrder', JSON.stringify(order));
+        // Optionally clear selectedProduct
+        localStorage.removeItem('selectedProduct');
+        // Redirect to thanks page
+        window.location.href = 'thanks.html';
+      });
+    });
+  </script>
+
+  <!-- Font Awesome -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
